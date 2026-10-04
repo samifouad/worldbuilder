@@ -1,0 +1,17 @@
+{
+  "name": "worldbuilder",
+  "version": "0.1.0",
+  "description": "Promptable 3D story-world prototype — scene-as-JSON, build-mode controls, placeable cameras, recordable takes",
+  "scripts": {
+    "start": "python3 -m http.server 8642",
+    "verify": "node verify.cjs"
+  },
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}

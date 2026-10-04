@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>storyforge — alley, 2am</title>
+<link rel="icon" href="data:,">
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #05070d; user-select: none; -webkit-user-select: none; }
+  canvas { display: block; cursor: crosshair; }
+  #ui { position: fixed; inset: 0; pointer-events: none; font: 12px/1.5 ui-monospace, Menlo, monospace; color: #cfd8e3; }
+  #ui > * { pointer-events: none; }
+  #cams, #cams button, #rec, #takes a, #scenejson, #scenejson summary, #ctxmenu, #ctxmenu .item, #playback { pointer-events: auto; }
+  #title { position: absolute; top: 14px; left: 16px; font-size: 14px; letter-spacing: .08em; color: #e8eef6; }
+  #title small { color: #7d8ba0; letter-spacing: 0; }
+  #hint { position: absolute; top: 36px; left: 16px; color: #7d8ba0; }
+  #cams { position: absolute; top: 14px; right: 16px; display: flex; gap: 6px; }
+  #cams button { font: inherit; color: #cfd8e3; background: #10151fb0; border: 1px solid #2a3547; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
+  #cams button.active { background: #ff2d9522; border-color: #ff2d95; color: #ffd7ea; }
+  #recwrap { position: absolute; bottom: 16px; right: 16px; display: flex; align-items: center; gap: 8px; }
+  #rec { font: inherit; background: #10151fb0; border: 1px solid #2a3547; color: #ff5560; padding: 8px 14px; cursor: pointer; border-radius: 3px; }
+  #rec.on { background: #ff556022; border-color: #ff5560; animation: blink 1s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: .45; } }
+  #rectime { color: #ff8890; }
+  #takes { position: absolute; bottom: 16px; left: 16px; display: flex; flex-direction: column; gap: 4px; }
+  #takes a { color: #8fd0ff; text-decoration: none; background: #10151fb0; border: 1px solid #2a3547; padding: 4px 8px; border-radius: 3px; }
+  #scenejson { position: absolute; bottom: 60px; left: 16px; max-width: 380px; max-height: 40vh; overflow: auto; background: #0b0f16e0; border: 1px solid #2a3547; border-radius: 3px; padding: 6px 10px; }
+  #scenejson summary { cursor: pointer; color: #7d8ba0; }
+  #scenejson pre { margin: 6px 0 0; font-size: 10px; color: #9fb0c8; }
+  #playback { position: absolute; bottom: 90px; right: 16px; width: 320px; border: 1px solid #2a3547; border-radius: 3px; display: none; }
+  #ctxmenu { position: fixed; display: none; min-width: 150px; background: #0b0f16f0; border: 1px solid #2a3547; border-radius: 4px; padding: 4px; z-index: 10; }
+  #ctxmenu .label { color: #7d8ba0; padding: 4px 8px; font-size: 10px; letter-spacing: .1em; }
+  #ctxmenu .item { padding: 5px 10px; cursor: pointer; border-radius: 3px; }
+  #ctxmenu .item:hover { background: #ff2d9522; color: #ffd7ea; }
+  #ctxmenu .sep { border-top: 1px solid #2a3547; margin: 4px 2px; }
+  #toast { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); background: #0b0f16e0; border: 1px solid #2a3547; color: #cfd8e3; padding: 6px 14px; border-radius: 4px; opacity: 0; transition: opacity .3s; }
+</style>
+</head>
+<body>
+<div id="ui">
+  <div id="title">ALLEY, 2AM <small>— scene 001 · hand-written scene.json</small></div>
+  <div id="hint">WASD walk · right-drag look · left-drag move · middle-click add · Q/E rotate · scroll height · G snap · Del remove · R record</div>
+  <div id="cams"></div>
+  <div id="recwrap"><span id="rectime"></span><button id="rec">● REC</button></div>
+  <div id="takes"></div>
+  <details id="scenejson"><summary>scene.json — this object is the whole world (later, the LLM writes it)</summary><pre></pre></details>
+  <video id="playback" controls></video>
+  <div id="ctxmenu">
+    <div class="label">add here</div>
+    <div class="item" data-act="camera">camera</div>
+    <div class="sep"></div>
+    <div class="item" data-act="streetlamp">streetlamp</div>
+    <div class="item" data-act="neonSign">neon sign</div>
+    <div class="item" data-act="dumpster">dumpster</div>
+    <div class="item" data-act="crate">crate</div>
+    <div class="item" data-act="puddle">puddle</div>
+  </div>
+  <div id="toast"></div>
+</div>
+<script type="importmap">
+{ "imports": { "three": "./node_modules/three/build/three.module.js" } }
+</script>
+<script type="module" src="./main.js"></script>
+</body>
+</html>
